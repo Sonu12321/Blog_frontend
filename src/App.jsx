@@ -1,0 +1,39 @@
+import React from 'react'
+import { BrowserRouter ,Route,Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import About from './pages/About'
+import Dashboard from './pages/Dashboard'
+import Project from './pages/Project'
+import Signup from './pages/Signup'
+import Header from './components/Header'
+import FooterCom from './components/Footer.jsx'
+import PrivateRoute from './components/PrivateRoute.jsx'
+import Signin from './pages/Signin.jsx'
+// import OnlyPrivateRoute from './components/OnlyPrivateRoute.jsx'
+import CreatePost from './pages/CreatePost.jsx'
+import UpdatePost from './pages/UpdatePost.jsx'
+
+function App() {
+  return (
+    <BrowserRouter>
+    <Header/>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route element={<PrivateRoute/>} >
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+      
+      <Route path="/createpost" element={<CreatePost />} />
+      <Route path="/updatepost/:postId" element={<UpdatePost />} />
+      
+      <Route path="/project" element={<Project/>}/>
+      <Route path="/sign-in" element={<Signin/>}/>
+      <Route path="/sign-up" element={<Signup/>}/>
+    </Routes>
+    <FooterCom/>
+    </BrowserRouter>
+  )
+}
+
+export default App
