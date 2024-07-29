@@ -3,7 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { BsFacebook, BsInstagram } from 'react-icons/bs'
 
-function FooterCom() {
+function Footerdown() {
   return (
     <Footer className='border border-t-8 border-teal-700'>
       <div className='w-full max-w-7xl mx-auto'>
@@ -54,4 +54,4 @@ function FooterCom() {
   )
 }
 
-export default FooterCom
+export default Footerdown

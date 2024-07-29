@@ -1,5 +1,5 @@
   import { Alert, Button, Dropdown, Modal, TextInput } from 'flowbite-react'
-  import React, { useState } from 'react'
+  import React, {  useEffect, useRef, useState } from 'react'
   import { useDispatch, useSelector } from 'react-redux'
   import { updateFailure,
     updateStart,
@@ -10,25 +10,32 @@
     SignoutSuccess
     
   } from '../Redux/user/userSlice'
+  import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
   import { HiOutlineExclamationCircle } from 'react-icons/hi';
   import {Link } from 'react-router-dom'
+import { app } from '../firebase'
 
   function Dashprofile() {
       
       const {currentUser,error} = useSelector((state)=>state.user)
       const [formdata,setFormdata] = useState({})
+      const [imagefile,setImagefile] = useState(null)
+      const [imagefileUrl,setImagefileUrl] = useState(null)
       const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
       const [updateUserError, setUpdateUserError] = useState(null);
       const [showmodal, setShowmodal] = useState(false);
-
+      const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
+      const [imageFileUploadError, setImageFileUploadError] = useState(null);
+      const imagePicker = useRef()
       const dispatch = useDispatch();
 
-      console.log(currentUser._id)
+      // console.log(currentUser._id)
+      console.log(imageFileUploadProgress,imageFileUploadError);
       
       const handlechange=(e)=>{
         setFormdata({...formdata,[e.target.id]:e.target.value})
       }
-      console.log(formdata)
+      // console.log(formdata)
       
       
       const handleSubmit = async (e) => {
@@ -51,10 +58,7 @@
             body: JSON.stringify(formdata),
             
           });
-          
-             
-            const data = await res.json();
-            
+          const data = await res.json();
         if (!res.ok) {
           dispatch(updateFailure(data.message));
           setUpdateUserError(data.message);
@@ -66,8 +70,10 @@
         dispatch(updateFailure(error.message));
         setUpdateUserError(error.message);
       }
-      }
-      const handleDeleteUser = async () => {
+    }
+
+
+const handleDeleteUser = async () => {
         setShowmodal(false);
         try {
           dispatch(deleteUserStart());
@@ -83,9 +89,9 @@
         } catch (error) {
           dispatch(deleteUserFailure(error.message));
         }
-      };
+};
 
-      const handlesignout = async()=>{
+const handlesignout = async()=>{
         try {
           const res = await fetch('/api/user/Signout',{
             method:'POST'
@@ -99,19 +105,64 @@
           
         } catch (error) {
           console.log(error.message);
+    }
+}
+
+const handleImagechange =(e) =>{
+        const file = e.target.files[0]
+        if(file){
+          setImagefile(file)
+          setImagefileUrl(URL.createObjectURL(file))
         }
       }
+      // console.log(imagefile,imagefileUrl);
 
+useEffect(()=>{
+  if(imagefile){
+    uploadfile()
+  }
+},[imagefile])
+const uploadfile = async () => {
+  console.log("imagefile");
+  const storage = getStorage(app);
+  const fileName = new Date().getTime() + imagefile.name;
+  const storageref = ref(storage, fileName);
+  // Correctly pass imagefile as the second argument
+  const uploadTask = uploadBytesResumable(storageref, imagefile);
+
+  uploadTask.on(
+    'state_changed',
+    (snapshot) => {
+      const progress =
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+      setImageFileUploadProgress(progress.toFixed(0));
+    },
+    (error) => {
+      setImageFileUploadError(
+        'Could not upload image (File must be less than 2MB)'
+      );
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        setImagefileUrl(downloadURL);
+        // Optionally update form data or state with the new image URL
+      });
+    }
+  );
+};
 
 
     return (
   <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-      <form className="flex flex-col " >
-    <div  className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full'>
-      <img src={currentUser.profilePicture} alt='user' className='rounded-full w-full h-full object-cover border-8 border-[lightgray] 
-            '           />
+      <form className="flex flex-col" >
+      <input type='file' accept='image/*' onChange={handleImagechange} ref={imagePicker} hidden/>
+    <div  className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden mb-2 rounded-full' onClick={()=>imagePicker.current.click()} >
+      <img src={imagefileUrl || currentUser.profilePicture} alt='user' className='rounded-full w-full h-full  object-cover border-4 border-[lightgray] 
+            '/>
           </div>
+          {imageFileUploadError && <Alert color='failure'>{imageFileUploadError}</Alert>}
 
       <TextInput className='py-1' type='text' placeholder='username' id='username' defaultValue={currentUser.username}onChange={handlechange}/>
       <TextInput className='py-1' type='text' placeholder='email' id='email' defaultValue={currentUser.email}onChange={handlechange}/>
