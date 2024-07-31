@@ -1,4 +1,4 @@
-  import { Alert, Button, Dropdown, Modal, TextInput } from 'flowbite-react'
+  import { Alert, Button,    Modal, TextInput } from 'flowbite-react'
   import React, {  useEffect, useRef, useState } from 'react'
   import { useDispatch, useSelector } from 'react-redux'
   import { updateFailure,
@@ -42,42 +42,47 @@ import { app } from '../firebase'
         e.preventDefault();
         setUpdateUserError(null);
         setUpdateUserSuccess(null);
+    
         if (Object.keys(formdata).length === 0) {
-          return;
+            setUpdateUserError("No changes to update");
+            return;
         }
+    
         try {
-          dispatch(updateStart());
-          let userId = currentUser._id
-          console.log(userId);
-          const res = await fetch(`/api/user/updates/${userId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            
-            body: JSON.stringify(formdata),
-            
-          });
-          const data = await res.json();
-        if (!res.ok) {
-          dispatch(updateFailure(data.message));
-          setUpdateUserError(data.message);
-        } else {
-          dispatch(updateSuccess(data));
-          setUpdateUserSuccess("User's profile updated successfully");
+            dispatch(updateStart());
+            // const userId = currentUser._id; // Assuming _id is the correct field
+            // console.log(userId);
+    
+            const res = await fetch(`/api/user/updates/${currentUser.data._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formdata),
+            });
+    
+            const data = await res.json();
+    
+            if (!res.ok) {
+                dispatch(updateFailure(data.message));
+                setUpdateUserError(data.message);
+            } else {
+                dispatch(updateSuccess(data));
+                setUpdateUserSuccess("User's profile updated successfully");
+            }
+        } catch (error) {
+            dispatch(updateFailure(error.message));
+            setUpdateUserError(error.message);
         }
-      } catch (error) {
-        dispatch(updateFailure(error.message));
-        setUpdateUserError(error.message);
-      }
-    }
+    };
+    
 
 
 const handleDeleteUser = async () => {
         setShowmodal(false);
         try {
           dispatch(deleteUserStart());
-          const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+          const res = await fetch(`/api/user/delete/${currentUser.data._id}`, {
             method: 'DELETE',
           });
           const data = await res.json();
@@ -146,26 +151,28 @@ const uploadfile = async () => {
     () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         setImagefileUrl(downloadURL);
+        setFormdata({...formdata,profilePicture:downloadURL})
         // Optionally update form data or state with the new image URL
       });
     }
   );
 };
-
+console.log(currentUser._id);
 
     return (
   <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-      <form className="flex flex-col" >
+      
+      <form className="flex flex-col" onSubmit={handleSubmit}>
       <input type='file' accept='image/*' onChange={handleImagechange} ref={imagePicker} hidden/>
     <div  className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden mb-2 rounded-full' onClick={()=>imagePicker.current.click()} >
-      <img src={imagefileUrl || currentUser.profilePicture} alt='user' className='rounded-full w-full h-full  object-cover border-4 border-[lightgray] 
+      <img src={imagefileUrl || currentUser.data.profilePicture} alt='user' className='rounded-full w-full h-full  object-cover border-4 border-[lightgray] 
             '/>
           </div>
           {imageFileUploadError && <Alert color='failure'>{imageFileUploadError}</Alert>}
 
-      <TextInput className='py-1' type='text' placeholder='username' id='username' defaultValue={currentUser.username}onChange={handlechange}/>
-      <TextInput className='py-1' type='text' placeholder='email' id='email' defaultValue={currentUser.email}onChange={handlechange}/>
+      <TextInput className='py-1' type='text' placeholder='username' id='username' defaultValue={currentUser?.data?.username} onChange={handlechange}/>
+      <TextInput className='py-1' type='text' placeholder='email' id='email' defaultValue={currentUser?.data?.email} onChange={handlechange}/>
       <TextInput className='py-1' type='text' placeholder='*********' id='password'onChange={handlechange}/>
       <br/>
       <Button className='mt-2 ' type='submit' gradientDuoTone='purpleToBlue' onClick={handleSubmit}>
@@ -183,7 +190,7 @@ const uploadfile = async () => {
               Create a post
             </Button>
           </Link>
-        
+        {/* console.log(currentUser?.data?._Id); */}
       
 
       </form>

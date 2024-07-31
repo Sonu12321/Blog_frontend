@@ -37,6 +37,7 @@ function Header() {
         <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-700 to-fuchsia-800 rounded-lg text-white'>Sonu's</span>
         Blog
         </Link>
+        console.log(currentUser);
         <form>
             <TextInput 
             type='text'
@@ -61,8 +62,8 @@ function Header() {
                         alt='user'
                         />
                         <Dropdown.Header>
-                            {/* <span className='block text-sm'>@{currentUser?.data?.username ? currentUser?.data?.username  : currentUser?.username }</span> */}
-                            <span className='block text-sm font-medium truncate'>{currentUser?.email ? currentUser?.email : currentUser?.email}</span>
+                            <span className='block text-sm'>{currentUser?.data?.email ? currentUser?.data?.email  : currentUser?.email }</span>
+                            {/* <span className='block text-sm font-medium truncate'>{currentUser?.data.email ? currentUser?.email : currentUser?.email}</span> */}
                         </Dropdown.Header>
                         <Link to='/dashboard?tab=profile'>
                         <Dropdown.Item>
