@@ -31,10 +31,11 @@ function Signin() {
                 body: JSON.stringify(formdata)
             });
             const data = await res.json();
-// console.log(data,"sdadsadf");
+console.log(data,"sdadsadf");
             if (data.success === false) {
                 dispatch(Signinfailure(data.message));
                 setLoading(false)
+                
             } else if (res.ok) {
                 dispatch(Signinsuccess(data));
                 setLoading(false)
