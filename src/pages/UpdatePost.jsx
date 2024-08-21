@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState  } from 'react';
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase.js';
 import {useNavigate,useParams} from 'react-router-dom'
+import { useSelector } from 'react-redux';
 
 
 function UpdatePost() {
@@ -13,11 +14,12 @@ function UpdatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const[publishError,setPublishError] = useState(null)
+  const { currentUser } = useSelector((state) => state.user);
   const navigate =useNavigate()
     const{postId} = useParams()
 
     useEffect(()=>{
-try {
+      try {
     const fetchpost =async()=>{
 
         const res = await fetch(`/api/post/getposts?postId=${postId}`)
@@ -28,12 +30,13 @@ try {
         }
         if(res.ok){
             setPublishError(null)
-            setFormData(data.post[0])
+            setFormData(data.posts[0])
         }
     }
     fetchpost()
 } catch (error) {
     console.log(error.message)
+    setPublishError('Failed to update the post. Please try again later.')
 }
 
     },[postId])
@@ -42,8 +45,8 @@ try {
     e.preventDefault()
 
     try {
-      const res = await fetch('/api/post/create', {
-        method: 'POST',
+      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser.data._id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },

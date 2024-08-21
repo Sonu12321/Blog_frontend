@@ -3,7 +3,7 @@ import {useLocation} from 'react-router-dom'
 import Dashbarsider from '../components/Dashbarsider'
 import Dashprofile from '../components/Dashprofile'
 import Dashposts from '../components/Dashposts'
-import DashboardUsers from './DashboardUsers'
+import DashboardUsers from '../'
 
 
 

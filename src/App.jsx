@@ -26,11 +26,12 @@ function App() {
       </Route>
       <Route element={<OnlyPrivateRoute/>} >
       <Route path="/create-post" element={<CreatePost />} />
+      <Route path='/update-post/:postId' element={<UpdatePost />} />
       </Route>
       {/* <Route path="/create-post" element={<CreatePost />} /> */}
 
       
-      <Route path="/updatepost/:postId" element={<UpdatePost />} />
+      {/* <Route path="/updatepost/:postId" element={<UpdatePost />} /> */}
       
       <Route path="/project" element={<Project/>}/>
       <Route path="/sign-in" element={<Signin/>}/>

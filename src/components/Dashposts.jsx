@@ -33,7 +33,7 @@ function Dashposts() {
         setFetchError('Failed to fetch posts');
       }
     };
-
+    
     fetchPosts();
   }, [currentUser]);
 
@@ -52,21 +52,26 @@ function Dashposts() {
       console.log(error);
     }
   };
-
+  
   const handleDeletePost = async () => {
     try {
       const res = await fetch(`/api/post/deleteposts/${postToDelete}/${currentUser.data._id}`, {
         method: 'DELETE',
       });
-      if (res.ok) {
+      // console.log(post._id,"sdsdwewewew");
+      if (!res.ok) {
+        console.log(data.message);
+      }else{
         setUserpost((prev) => prev.filter((post) => post._id !== postToDelete));
         setShowmodal(false);
+        
+        
       }
     } catch (error) {
       console.log(error);
     }
   };
-
+  
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {fetchError ? (
@@ -106,7 +111,7 @@ function Dashposts() {
                     </span>
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/edit/${post._id}`} className='text-teal-500 hover:underline'>
+                    <Link to={`/update-post/${post._id}`} className='text-teal-500 hover:underline'>
                       <span>Edit</span>
                     </Link>
                   </Table.Cell>
