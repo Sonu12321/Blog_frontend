@@ -12,6 +12,7 @@ import Signin from './pages/Signin.jsx'
 // import OnlyPrivateRoute from './components/OnlyPrivateRoute.jsx'
 import CreatePost from './pages/CreatePost.jsx'
 import UpdatePost from './pages/UpdatePost.jsx'
+import OnlyPrivateRoute from './components/OnlyPrivateRoute.jsx'
 
 function App() {
   return (
@@ -23,8 +24,12 @@ function App() {
       <Route element={<PrivateRoute/>} >
         <Route path="/dashboard" element={<Dashboard />} />
       </Route>
+      <Route element={<OnlyPrivateRoute/>} >
+      <Route path="/create-post" element={<CreatePost />} />
+      </Route>
+      {/* <Route path="/create-post" element={<CreatePost />} /> */}
+
       
-      <Route path="/createpost" element={<CreatePost />} />
       <Route path="/updatepost/:postId" element={<UpdatePost />} />
       
       <Route path="/project" element={<Project/>}/>

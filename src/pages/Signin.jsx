@@ -37,6 +37,8 @@ console.log(data,"sdadsadf");
                 setLoading(false)
                 
             } else if (res.ok) {
+                // console.log({...data},"sdsd");
+                
                 dispatch(Signinsuccess(data));
                 setLoading(false)
                 navigate('/');

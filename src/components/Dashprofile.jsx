@@ -13,6 +13,7 @@
   import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
   import { HiOutlineExclamationCircle } from 'react-icons/hi';
   import {Link } from 'react-router-dom'
+import CreatePost from '../pages/CreatePost'
 import { app } from '../firebase'
 
   function Dashprofile() {
@@ -30,7 +31,7 @@ import { app } from '../firebase'
       const dispatch = useDispatch();
 
       // console.log(currentUser._id)
-      console.log(imageFileUploadProgress,imageFileUploadError);
+      // console.log(imageFileUploadProgress,imageFileUploadError);
       
       const handlechange=(e)=>{
         setFormdata({...formdata,[e.target.id]:e.target.value})
@@ -75,7 +76,7 @@ import { app } from '../firebase'
             setUpdateUserError(error.message);
         }
     };
-    
+
 
 
 const handleDeleteUser = async () => {
@@ -157,7 +158,7 @@ const uploadfile = async () => {
     }
   );
 };
-console.log(currentUser._id);
+// console.log(currentUser.data._id,sdsdwdw);
 
     return (
   <div className="max-w-lg mx-auto p-3 w-full">
@@ -179,10 +180,8 @@ console.log(currentUser._id);
           Update
       </Button>
       
-       <br/>
-          <Link to={'/createpost'}>
+          <Link to={'/create-post'}>
             <Button
-            
             type='button'
             gradientDuoTone='purpleToPink'
             className='w-full mt-2'

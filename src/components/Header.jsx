@@ -37,7 +37,7 @@ function Header() {
         <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-700 to-fuchsia-800 rounded-lg text-white'>Sonu's</span>
         Blog
         </Link>
-        console.log(currentUser);
+        
         <form>
             <TextInput 
             type='text'
