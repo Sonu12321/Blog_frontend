@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Table, Modal, Button } from 'flowbite-react';
+import { Table, Modal, Button, TableCell } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
-function Dashposts() {
+function  Dashposts() {
   const { currentUser } = useSelector((state) => state.user);
   const [userpost, setUserpost] = useState([]);
   const [fetchError, setFetchError] = useState(null);
@@ -76,7 +76,7 @@ function Dashposts() {
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {fetchError ? (
         <p>{fetchError}</p>
-      ) :  currentUser.data._id && userpost.length > 0 ? (
+      ) :  currentUser.data._id || currentUser.data.isAdmin && userpost.length > 1 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
@@ -97,7 +97,11 @@ function Dashposts() {
                   <Table.Cell>
                     <img src={post.image} alt={post.title} className="w-16 h-16 object-cover" />
                   </Table.Cell>
-                  <Table.Cell>{post.title}</Table.Cell>
+                  <Table.Cell>
+                  <Link to={`/post/${post.slug}`} className="text-teal-500 hover:underline">
+                      {post.title}
+                    </Link>
+                    </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
                     <span

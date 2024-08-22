@@ -3,7 +3,9 @@ import {useLocation} from 'react-router-dom'
 import Dashbarsider from '../components/Dashbarsider'
 import Dashprofile from '../components/Dashprofile'
 import Dashposts from '../components/Dashposts'
-import DashUsers from '../components/DashOnlyusers'
+// import DashUsers from '../components/DashOnlyusers'
+import DashUserShow from '../components/DashUserShow'
+import DashboardComp from '../components/DashboardComp'
 
 
 
@@ -28,7 +30,9 @@ function Dashboard() {
         {/* {dashposts} */}
         {tab === 'posts' && <Dashposts/>}
         {/* {dashboardUSers} */}
-        {tab === 'users' && <DashUsers/>}
+        {tab === 'users' && <DashUserShow/>}
+        {/*dashboard*/ }
+        {tab === 'dash' && <DashboardComp />}
 
         </div>
 

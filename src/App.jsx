@@ -13,10 +13,13 @@ import Signin from './pages/Signin.jsx'
 import CreatePost from './pages/CreatePost.jsx'
 import UpdatePost from './pages/UpdatePost.jsx'
 import OnlyPrivateRoute from './components/OnlyPrivateRoute.jsx'
+import PostPage from './pages/PostPages.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 
 function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop/>
     <Header/>
     <Routes>
       <Route path="/" element={<Home />} />
@@ -33,6 +36,7 @@ function App() {
       
       {/* <Route path="/updatepost/:postId" element={<UpdatePost />} /> */}
       
+      <Route path="/post/:postSlug" element={<PostPage/>}/>
       <Route path="/project" element={<Project/>}/>
       <Route path="/sign-in" element={<Signin/>}/>
       <Route path="/sign-up" element={<Signup/>}/>
