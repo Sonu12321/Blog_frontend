@@ -54,7 +54,7 @@ import { app } from '../firebase'
             // const userId = currentUser._id; // Assuming _id is the correct field
             // console.log(userId);
     
-            const res = await fetch(`/api/user/updates/${currentUser.data._id}`, {
+            const res = await fetch(`/api/user/updates/${currentUser._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const handleDeleteUser = async () => {
         setShowmodal(false);
         try {
           dispatch(deleteUserStart());
-          const res = await fetch(`/api/user/delete/${currentUser.data._id}`, {
+          const res = await fetch(`/api/user/delete/${currentUser._id}`, {
             method: 'DELETE',
           });
           const data = await res.json();
@@ -167,13 +167,13 @@ const uploadfile = async () => {
       <form className="flex flex-col" onSubmit={handleSubmit}>
       <input type='file' accept='image/*' onChange={handleImagechange} ref={imagePicker} hidden/>
     <div  className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden mb-2 rounded-full' onClick={()=>imagePicker.current.click()} >
-      <img src={imagefileUrl || currentUser.data.profilePicture} alt='user' className='rounded-full w-full h-full  object-cover border-4 border-[lightgray] 
+      <img src={imagefileUrl || currentUser.profilePicture} alt='user' className='rounded-full w-full h-full  object-cover border-4 border-[lightgray] 
             '/>
           </div>
           {imageFileUploadError && <Alert color='failure'>{imageFileUploadError}</Alert>}
 
-      <TextInput className='py-1' type='text' placeholder='username' id='username' defaultValue={currentUser?.data?.username} onChange={handlechange}/>
-      <TextInput className='py-1' type='text' placeholder='email' id='email' defaultValue={currentUser?.data?.email} onChange={handlechange}/>
+      <TextInput className='py-1' type='text' placeholder='username' id='username' defaultValue={currentUser?.username} onChange={handlechange}/>
+      <TextInput className='py-1' type='text' placeholder='email' id='email' defaultValue={currentUser?.email} onChange={handlechange}/>
       <TextInput className='py-1' type='text' placeholder='*********' id='password'onChange={handlechange}/>
       <br/>
       <Button className='mt-2 ' type='submit' gradientDuoTone='purpleToBlue' onClick={handleSubmit}>

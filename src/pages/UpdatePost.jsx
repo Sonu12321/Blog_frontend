@@ -45,7 +45,7 @@ function UpdatePost() {
     e.preventDefault()
 
     try {
-      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser.data._id}`, {
+      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

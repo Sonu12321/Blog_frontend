@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {Sidebar} from 'flowbite-react'
-import { HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiUser} from 'react-icons/hi'
+import { HiArrowSmRight, HiChartPie, HiDocumentText, HiOutlineUserGroup, HiUser} from 'react-icons/hi'
 import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { SignoutSuccess } from '../Redux/user/userSlice.js'
@@ -12,8 +12,10 @@ function Dashbarsider() {
     const dispatch = useDispatch()
     const { currentUser } = useSelector((state) => state.user);
 
+    console.log(currentUser,'sdsdd');
   const [tab,setTab]=useState('')
   useEffect(()=>{
+    
     const urlParams = new URLSearchParams(location.search)
     const tabFormUrl = urlParams.get('tab')
     if(tabFormUrl){
@@ -58,7 +60,7 @@ function Dashbarsider() {
           )}
                 <Link to='/dashboard?tab=Profile'>
                 <Sidebar.Item active={tab === 'Profile'} icon={HiUser}   
-                label={currentUser.data.isAdmin ? 'Admin' : 'User'}
+                label={currentUser.isAdmin ? 'Admin' : 'User'}
                 labelColor='dark' as='div'>
                     Profile
                 </Sidebar.Item>

@@ -19,7 +19,7 @@ function  Dashposts() {
       }
 
       try {
-        const res = await fetch(`/api/post/getposts?userId=${currentUser.data._id}`);
+        const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
         const data = await res.json();
         if (res.ok) {
           setUserpost(data.posts);
@@ -40,7 +40,7 @@ function  Dashposts() {
   const handleShowMore = async () => {
     const startIndex = userpost.length;
     try {
-      const res = await fetch(`/api/post/getposts?userId=${currentUser.data._id}&startIndex=${startIndex}`);
+      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
       const data = await res.json();
       if (res.ok) {
         setUserpost((prev) => [...prev, ...data.posts]);
@@ -55,7 +55,7 @@ function  Dashposts() {
   
   const handleDeletePost = async () => {
     try {
-      const res = await fetch(`/api/post/deleteposts/${postToDelete}/${currentUser.data._id}`, {
+      const res = await fetch(`/api/post/deleteposts/${postToDelete}/${currentUser._id}`, {
         method: 'DELETE',
       });
       // console.log(post._id,"sdsdwewewew");
@@ -76,7 +76,7 @@ function  Dashposts() {
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {fetchError ? (
         <p>{fetchError}</p>
-      ) :  currentUser.data._id || currentUser.data.isAdmin && userpost.length > 1 ? (
+      ) :  currentUser._id || currentUser.isAdmin && userpost.length > 1 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>

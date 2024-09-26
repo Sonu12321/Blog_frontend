@@ -29,7 +29,7 @@ export default function CommentSection({ postId }) {
         body: JSON.stringify({
           content: comment,
           postId,
-          userId: currentUser.data._id,
+          userId: currentUser._id,
         }),
       });
       const data = await res.json();
@@ -119,14 +119,14 @@ export default function CommentSection({ postId }) {
           <p>Signed in as:</p>
           <img
             className='h-5 w-5 object-cover rounded-full'
-            src={currentUser.data.profilePicture}
+            src={currentUser.profilePicture}
             alt=''
           />
           <Link
             to={'/dashboard?tab=profile'}
             className='text-xs text-cyan-600 hover:underline'
           >
-            @{currentUser.data.username}
+            @{currentUser.username}
           </Link>
         </div>
       ) : (
