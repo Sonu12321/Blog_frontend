@@ -26,10 +26,10 @@ import { useSelector } from 'react-redux';
 //     getUser();
 //   }, [comment]);
 
-//   const handleEdit = () => {
-//     setIsEditing(true);
-//     setEditedContent(comment.content);
-//   };
+  const handleEdit = () => {
+    setIsEditing(true);
+    setEditedContent(comment.content);
+  };
 
 //   const handleSave = async () => {
 //     try {

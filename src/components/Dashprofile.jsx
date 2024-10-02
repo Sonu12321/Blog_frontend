@@ -158,7 +158,7 @@ const uploadfile = async () => {
     }
   );
 };
-// console.log(currentUser.data._id,sdsdwdw);
+// console.log(currentUser.data._id,'sdsdwdw');
 
     return (
   <div className="max-w-lg mx-auto p-3 w-full">
