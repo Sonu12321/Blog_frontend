@@ -6,6 +6,7 @@ import Dashposts from '../components/Dashposts'
 // import DashUsers from '../components/DashOnlyusers'
 import DashUserShow from '../components/DashUserShow'
 import DashboardComp from '../components/DashboardComp'
+import CreatePost from './CreatePost'
 
 
 
@@ -33,6 +34,8 @@ function Dashboard() {
         {tab === 'users' && <DashUserShow/>}
         {/*dashboard*/ }
         {tab === 'dash' && <DashboardComp />}
+        {/* Posting */}
+        {tab === 'Posting' && <CreatePost/>}
 
         </div>
 

@@ -1,31 +1,26 @@
-import { configureStore,combineReducers } from '@reduxjs/toolkit'
-import userSlice from './user/userSlice.js'
-import ThemeReducer from './theme/ThemeSlice.js'
-import {persistReducer, persistStore} from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-// import  version  from 'react'
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import userSlice from './user/userSlice';
+import ThemeReducer from './theme/ThemeSlice';
 
+const rootReducer = combineReducers({
+  user: userSlice,
+  theme: ThemeReducer,
+});
 
+const persistConfig = {
+  key: 'root',
+  storage,
+  version: 1,
+};
 
-const rootReducer=combineReducers({
-    user:userSlice,
-    theme:ThemeReducer,
-})
-
-const persistconfig = {
-    key:'root',
-    storage,
-    version:1,
-}
-
-
-const persistReducers = persistReducer(persistconfig,rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistReducers,
-    midllerware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({serializableCheck:false})
-  },
-)
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
+});
 
-export const persitor = persistStore(store)
+export const persitor = persistStore(store);
