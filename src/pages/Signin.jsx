@@ -39,7 +39,7 @@ console.log(data,"sdadsadf");
             } else if (res.ok) {
                 // console.log({...data},"sdsd");
                 
-                dispatch(Signinsuccess(data));
+                dispatch(Signinsuccess(data.data));
                 setLoading(false)
                 navigate('/');
             }
