@@ -69,17 +69,28 @@ function Dashbarsider() {
                 Post
               </Sidebar.Item>
             </Link>
-            <Link to='/dashboard?tab=users'>
-              <Sidebar.Item active={tab === 'users'} icon={HiOutlineUserGroup} as='div'>
-                Users
-              </Sidebar.Item>
-            </Link>
-            <Link to='/create-post '>
-              <Sidebar.Item active={tab === 'users'} icon={HiOutlineUserGroup} as='div'>
+            <Sidebar.Items>
+          <Sidebar.ItemGroup className='flex flex-col gap-1'>
+            {currentUser && currentUser.isAdmin && (
+              <Link to='/dashboard?tab=dash'>
+                <Sidebar.Item
+                  active={tab === 'dash' || !tab}
+                  icon={HiChartPie}
+                  as='div'
+                >
+                  users
+                </Sidebar.Item>
+              </Link>
+            )}
+            </Sidebar.ItemGroup>
+            </Sidebar.Items>
+
+
+          <Link to='/create-post '>
+              <Sidebar.Item active={tab === 'create-post'} icon={HiOutlineUserGroup} as='div'>
                 Create Post
               </Sidebar.Item>
             </Link>
-
 
             <Sidebar.Item icon={HiArrowSmRight} className='cursor-pointer' onClick={handlesignout}>
               Sign-out

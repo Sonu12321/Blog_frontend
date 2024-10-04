@@ -4,7 +4,7 @@ import { Table, Modal, Button, TableCell } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
-function  Dashposts() {
+function Dashposts() {
   const { currentUser } = useSelector((state) => state.user);
   const [userpost, setUserpost] = useState([]);
   const [fetchError, setFetchError] = useState(null);
@@ -19,8 +19,14 @@ function  Dashposts() {
       }
 
       try {
-        const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
+        // Fetch posts based on whether the user is an admin
+        const url = currentUser.isAdmin 
+          ? `/api/post/getposts` // Admin fetches all posts
+          : `/api/post/getposts?userId=${currentUser._id}`; // Non-admin fetches their own posts
+
+        const res = await fetch(url);
         const data = await res.json();
+
         if (res.ok) {
           setUserpost(data.posts);
           if (data.posts.length < 9) {
@@ -33,15 +39,20 @@ function  Dashposts() {
         setFetchError('Failed to fetch posts');
       }
     };
-    
+
     fetchPosts();
   }, [currentUser]);
 
   const handleShowMore = async () => {
     const startIndex = userpost.length;
     try {
-      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+      const url = currentUser.isAdmin 
+        ? `/api/post/getposts?startIndex=${startIndex}`
+        : `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`;
+
+      const res = await fetch(url);
       const data = await res.json();
+
       if (res.ok) {
         setUserpost((prev) => [...prev, ...data.posts]);
         if (data.posts.length < 9) {
@@ -52,31 +63,28 @@ function  Dashposts() {
       console.log(error);
     }
   };
-  
+
   const handleDeletePost = async () => {
     try {
       const res = await fetch(`/api/post/deleteposts/${postToDelete}/${currentUser._id}`, {
         method: 'DELETE',
       });
-      // console.log(post._id,"sdsdwewewew");
       if (!res.ok) {
-        console.log(data.message);
-      }else{
+        console.log(res.message);
+      } else {
         setUserpost((prev) => prev.filter((post) => post._id !== postToDelete));
         setShowmodal(false);
-        
-        
       }
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {fetchError ? (
         <p>{fetchError}</p>
-      ) :  currentUser._id || currentUser.isAdmin && userpost.length > 1 ? (
+      ) : userpost.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
@@ -85,10 +93,7 @@ function  Dashposts() {
               <Table.HeadCell>Post title</Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
-              {/* <Table.HeadCell>Time Updated</Table.HeadCell> */}
-              <Table.HeadCell>
-                <span>Edit</span>
-              </Table.HeadCell>
+              <Table.HeadCell>Edit</Table.HeadCell>
             </Table.Head>
             <Table.Body>
               {userpost.map((post) => (
@@ -98,15 +103,15 @@ function  Dashposts() {
                     <img src={post.image} alt={post.title} className="w-16 h-16 object-cover" />
                   </Table.Cell>
                   <Table.Cell>
-                  <Link to={`/post/${post.slug}`} className="text-teal-500 hover:underline">
+                    <Link to={`/post/${post.slug}`} className="text-teal-500 hover:underline">
                       {post.title}
                     </Link>
-                    </Table.Cell>
+                  </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
                     <span
                       onClick={() => {
-                        setPostToDelete(post._id); // Corrected here
+                        setPostToDelete(post._id);
                         setShowmodal(true);
                       }}
                       className='font-medium text-red-500 hover:underline cursor-pointer'
@@ -116,7 +121,7 @@ function  Dashposts() {
                   </Table.Cell>
                   <Table.Cell>
                     <Link to={`/update-post/${post._id}`} className='text-teal-500 hover:underline'>
-                      <span>Edit</span>
+                      Edit
                     </Link>
                   </Table.Cell>
                 </Table.Row>
